@@ -1,3 +1,4 @@
+// Archivo: src/pages/Usuarios.jsx
 import React, { useEffect, useState } from 'react';
 import Layout from '../components/Layout';
 import { useAuth } from '../context/AuthContext';
@@ -50,7 +51,8 @@ const Usuarios = () => {
     const nombreCompleto = `${u.nombres} ${u.apellidos}`.toLowerCase();
     return (
       nombreCompleto.includes(busqueda.toLowerCase()) ||
-      u.email?.toLowerCase().includes(busqueda.toLowerCase())
+      u.email?.toLowerCase().includes(busqueda.toLowerCase()) ||
+      u.numero_documento?.toLowerCase().includes(busqueda.toLowerCase())
     );
   });
 
@@ -61,7 +63,7 @@ const Usuarios = () => {
           <h2 className="text-2xl font-bold text-blue-800">Gestión de Usuarios</h2>
           <button
             className="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded"
-            onClick={() => navigate('/usuarios/nuevo')}
+            onClick={() => navigate('/maestros/usuarios/nuevo')}
           >
             ➕ Nuevo Usuario
           </button>
@@ -69,7 +71,7 @@ const Usuarios = () => {
 
         <input
           type="text"
-          placeholder="Buscar por nombre o email..."
+          placeholder="Buscar por nombre, email o documento..."
           className="mb-4 px-4 py-2 border rounded w-full max-w-sm"
           value={busqueda}
           onChange={(e) => setBusqueda(e.target.value)}
@@ -90,8 +92,9 @@ const Usuarios = () => {
                 <tr className="text-left text-sm text-gray-700">
                   <th className="px-4 py-2">Nombre</th>
                   <th className="px-4 py-2">Email</th>
-                  <th className="px-4 py-2">Documento</th>
+                  <th className="px-4 py-2">Nro. Documento</th>
                   <th className="px-4 py-2">Rol</th>
+                  <th className="px-4 py-2">Sucursal</th>
                   <th className="px-4 py-2">Estado</th>
                   <th className="px-4 py-2">Acciones</th>
                 </tr>
@@ -104,6 +107,7 @@ const Usuarios = () => {
                       <td className="px-4 py-2">{u.email}</td>
                       <td className="px-4 py-2">{u.numero_documento}</td>
                       <td className="px-4 py-2">{u.rol || 'No definido'}</td>
+                      <td className="px-4 py-2">{u.sucursal || 'No definido'}</td>
                       <td className="px-4 py-2">
                         <span
                           className={`px-2 py-1 rounded text-xs font-bold ${
@@ -112,12 +116,12 @@ const Usuarios = () => {
                               : 'bg-red-100 text-red-700'
                           }`}
                         >
-                          {u.estado_id === 1 ? 'ACTIVO' : 'INACTIVO'}
+                          {u.estado_id === 1 ? 'Activo' : 'Inactivo'}
                         </span>
                       </td>
                       <td className="px-4 py-2">
                         <button
-                          onClick={() => navigate(`/usuarios/${u.id}/editar`)}
+                          onClick={() => navigate(`/maestros/usuarios/${u.id}/editar`)}
                           className="text-blue-600 hover:underline mr-3"
                         >
                           Editar

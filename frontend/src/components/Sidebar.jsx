@@ -6,9 +6,9 @@ const Sidebar = () => {
   const { modulos, usuario, logout } = useAuth();
   const navigate = useNavigate();
   const [menuEstructurado, setMenuEstructurado] = useState({});
-  const [isOpen, setIsOpen] = useState(false); // sidebar móvil
-  const [moduloOpen, setModuloOpen] = useState({}); // estado por módulo
-  const [menuOpen, setMenuOpen] = useState({}); // estado por menú
+  const [isOpen, setIsOpen] = useState(false);
+  const [moduloOpen, setModuloOpen] = useState({});
+  const [menuOpen, setMenuOpen] = useState({});
 
   useEffect(() => {
     const estructura = {};
@@ -24,11 +24,10 @@ const Sidebar = () => {
     });
     setMenuEstructurado(estructura);
 
-    // Inicializar todos cerrados
     const modState = {};
     const menuState = {};
     Object.keys(estructura).forEach((modulo) => {
-      modState[modulo] = true; // expandido por defecto
+      modState[modulo] = true;
       Object.keys(estructura[modulo]).forEach((menu) => {
         menuState[`${modulo}-${menu}`] = true;
       });
@@ -53,22 +52,19 @@ const Sidebar = () => {
 
   return (
     <>
-      {/* Toggle móvil */}
+      {/* Móvil: barra superior */}
       <div className="md:hidden flex justify-between items-center bg-white border-b px-4 py-2 shadow">
         <h2 className="text-lg font-bold text-blue-800">SYRDIA ERP</h2>
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="text-blue-600 text-2xl focus:outline-none"
-        >
+        <button onClick={() => setIsOpen(!isOpen)} className="text-blue-600 text-2xl">
           ☰
         </button>
       </div>
 
-      {/* Sidebar */}
+      {/* Sidebar principal */}
       <aside
         className={`bg-white w-64 h-screen border-r flex-col justify-between p-4 shadow-md
-          fixed z-40 top-0 left-0 transform transition-transform duration-300 ease-in-out
-          ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:static md:flex`}
+        fixed z-40 top-0 left-0 transform transition-transform duration-300 ease-in-out
+        ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:static md:flex`}
       >
         <div className="overflow-y-auto flex-grow">
           <h2 className="text-xl font-bold text-blue-800 mb-6 hidden md:block">SYRDIA ERP</h2>
@@ -125,7 +121,7 @@ const Sidebar = () => {
           )}
         </div>
 
-        {/* Pie: usuario y logout */}
+        {/* Pie de sidebar */}
         <div className="mt-4 border-t pt-4 text-sm text-gray-700">
           <p className="mb-1">👤 {usuario?.nombres}</p>
           <ul>

@@ -65,3 +65,95 @@ exports.obtenerMenuPorUsuario = async (req, res) => {
     return res.status(500).json({ msg: 'Error al obtener menú del usuario' });
   }
 };
+
+exports.crearUsuario = async (req, res) => {
+  try {
+    const data = req.body;
+
+    const camposObligatorios = [
+      'nombres', 'apellidos', 'email', 'tipo_documento_id',
+      'numero_documento', 'rol_id', 'empresa_id',
+      'sucursal_id', 'password', 'estado_id', 'created_by'
+    ];
+
+    for (const campo of camposObligatorios) {
+      if (!data[campo]) {
+        return res.status(400).json({ msg: `Falta el campo: ${campo}` });
+      }
+    }
+
+    // ✅ Registrar y capturar ID nuevo
+    const nuevoUsuarioId = await Usuario.crearUsuario(data);
+
+    res.status(201).json({
+      msg: 'Usuario creado correctamente',
+      usuario_id: nuevoUsuarioId
+    });
+
+  } catch (err) {
+    console.error('Error al crear usuario:', err);
+    res.status(500).json({ msg: 'Error al crear usuario' });
+  }
+};
+
+exports.editarUsuario = async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const {
+      nombres,
+      apellidos,
+      email,
+      numero_documento,
+      tipo_documento_id,
+      rol_id,
+      sucursal_id,
+      estado_id,
+      updated_by
+    } = req.body;
+
+    const camposObligatorios = [
+      'nombres', 'apellidos', 'email', 'numero_documento',
+      'tipo_documento_id', 'rol_id', 'sucursal_id',
+      'estado_id', 'updated_by'
+    ];
+
+    for (const campo of camposObligatorios) {
+      if (!req.body[campo]) {
+        return res.status(400).json({ msg: `Falta el campo: ${campo}` });
+      }
+    }
+
+    await Usuario.actualizarUsuario({
+      id,
+      nombres,
+      apellidos,
+      email,
+      numero_documento,
+      tipo_documento_id,
+      rol_id,
+      sucursal_id,
+      estado_id,
+      updated_by
+    });
+
+    res.json({ msg: 'Usuario actualizado correctamente' });
+
+  } catch (error) {
+    console.error('Error al actualizar usuario:', error);
+    res.status(500).json({ msg: 'Error al actualizar usuario' });
+  }
+};
+
+exports.obtenerUsuarioPorId = async (req, res) => {
+  const id = parseInt(req.params.id);
+  try {
+    const usuario = await Usuario.findById(id);
+    if (!usuario) {
+      return res.status(404).json({ msg: 'Usuario no encontrado' });
+    }
+    res.json({ usuario });
+  } catch (error) {
+    console.error('Error al obtener usuario:', error.message);
+    res.status(500).json({ msg: 'Error al obtener usuario' });
+  }
+};

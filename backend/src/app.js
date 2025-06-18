@@ -17,6 +17,9 @@ app.use(express.json());
 
 app.use('/api/auth', require('./routes/auth.routes'));
 app.use('/api/usuarios', require('./routes/usuario.routes'));
+app.use('/api/maestros', require('./routes/maestro.routes'));
+app.use('/api/roles', require('./routes/rol.routes'));
+app.use('/api/sucursales', require('./routes/sucursal.routes'));
 
 app.listen(process.env.PORT, () => {
   console.log(`SYRDIA API escuchando en puerto ${process.env.PORT}`);
